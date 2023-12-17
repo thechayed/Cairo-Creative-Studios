@@ -1,0 +1,69 @@
+*
+{
+    scroll-behavior: smooth;
+
+    --link-color: #FFF;
+    --link-size: 1rem;
+}
+
+body
+{
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.nav
+{
+    position: absolute;
+    float: left;
+
+    left: 0;
+    top: 4px;
+    width: 100%;
+    height: 24px;
+    z-index: 100;
+}
+
+.nav ul
+{
+    position: fixed;
+
+    right: 5rem;
+    width: 25%;
+    
+    display: flex;
+    
+    flex-direction: row;
+    justify-content: center;
+    vertical-align: middle;
+    align-items: center;
+
+    list-style: none;
+}
+
+.nav ul li
+{
+    margin-left: 1rem;
+
+    color: var(--link-color);
+    font-size: var(--link-size);
+}
+
+.content
+{
+    position: absolute;
+    
+    left:0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+
+    display:grid;
+    grid-column: 1;
+}
+
+.content section
+{
+    width: 100vw;
+    height: 100vh;
+}

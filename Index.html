@@ -1,0 +1,91 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/main.css">
+
+        <script src="js/tween.umd.js"></script>
+        <!-- script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/ScrollMagic.min.js"></script -->
+    </head>
+    <body>
+        <nav class="nav">
+            <ul>
+                <li>
+                    <a href="#Splash">
+                    Splash
+                    </a>
+                </li>
+                <li>
+                    <a href="#Portfolio">
+                        Portfolio
+                    </a>
+                </li>
+                <li>
+                    <a href="#Services">
+                        Services
+                    </a>
+                </li>
+                <li>
+                    <a href="#About">
+                        About
+                    </a>
+                </li>
+                <li>
+                    <a>
+                        Blog
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="content">
+            <section id="Splash">
+                <video class="content-bgvideo"></video>
+            </section>
+            <section id="Portfolio">
+                <video class="content-bgvideo"></video>
+            </section>
+            <section id="Services">
+                <video class="content-bgvideo"></video>
+            </section>
+            <section id="About">
+                <video class="content-bgvideo"></video>
+            </section>
+        </div>
+
+        <script>
+            var position = {y: 0};
+            var autoScroll = false;
+
+            var tween = new TWEEN.Tween(position, false) // Create a new tween that modifies 'coords'.
+                .to({y: 0}, 1000) // Move to (300, 200) in 1 second.
+                .easing(TWEEN.Easing.Elastic.Out) // Use an easing function to make the animation smooth.
+                .onUpdate(() => {
+                    window.scrollTo(0, position.y);
+                })
+                .start() // Start the tween immediately.
+
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function (e) {
+                        position.y = window.scrollY;
+                        autoScroll = true;
+                        e.preventDefault();
+                        var targetElement = document.querySelector(this.getAttribute('href'));
+
+                        tween = new TWEEN.Tween(position, false) // Create a new tween that modifies 'coords'.
+                            .to({y: targetElement.offsetTop}, 1000) // Move to (300, 200) in 1 second.
+                            .easing(TWEEN.Easing.Elastic.Out) // Use an easing function to make the animation smooth.
+                            .onUpdate(() => {
+                                window.scrollTo(0, position.y);
+                            })
+                            .start() // Start the tween immediately.
+                        });
+            });
+
+            function renderLoop(time) {
+                window.requestAnimationFrame(renderLoop);
+                if(autoScroll)
+                    tween.update(time);
+            }
+            window.requestAnimationFrame(renderLoop);
+        </script>
+    </body>
+</html>
