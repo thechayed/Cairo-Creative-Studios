@@ -8,8 +8,24 @@
     scroll-behavior: smooth;
     font-family: 'Roboto', sans-serif;
 
-    --link-color: #333;
-    --link-size: 1.25rem;
+    --nav-text-color: #202136;
+    --nav-text-size: 1.25rem;
+
+    --gray-0: #1b1523;
+    --gray-1: #202136;
+    --gray-3: #23233A;
+    --gray-4: #4d4d62;
+    --gray-5: #777B86;
+    --gray-6: #cbd2d2;
+    --gray-7: #fcfcfc;
+
+    --red-0: #bd3869;
+    --red-1: #fc6985;
+    --red-2: #fc7e9a;
+
+    --green-0: #85cb62;
+    --green-1: #b6d98c;
+    --green-2: #cbe0a8;
 }
 
 body
@@ -18,24 +34,38 @@ body
     overflow-x: hidden;
 }
 
-.nav
+header
 {
     position: fixed;
     float: left;
 
+    display: grid;
+    grid-template: "a a a";
+
     left: 0;
-    width: 100%;
     z-index: 100;
+
+    width: 100%;
+    height: 64px;
+
+    outline: solid 1px;
 }
 
-.nav ul
+nav
+{
+    left: 0;
+    width: 75vw;
+}
+
+nav ul
 {
     display: flex;
 
     width: 100%;
-    height: 48px;
+    height: 100%;
 
     left:0;
+    top:8px;
 
     margin: 0;
     padding: 0;
@@ -47,25 +77,112 @@ body
 
     list-style: none;
 
-    background: rgba(255, 255, 255, 0.5);
+    background: var(--gray-7);
 }
-
-.nav ul li
+nav ul li
 {
     display:flex;
     align-items: center;
     justify-content: center;
 
-    width: 100%;
+    width: 75%;
     height: 100%;
-    box-shadow: inset 0 0 2px 2px rgba(0, 0, 0, 0.5); /* Apply an inset shadow effect 
+    /* box-shadow: inset 0 0 2px 2px rgba(0, 0, 0, 0.5); */
+
+    display: inline-block;
+    position: relative;
 }
 
-.nav ul li a
+nav ul li:hover {
+    background: var(--gray-5);
+}
+nav ul li a:focus {
+    background: var(--gray-5);
+    outline: none;
+}
+
+nav ul li a:before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-top: 2px solid #1B1523;
+    border-bottom: 2px solid #1B1523;
+    transform: scaleY(2);
+    opacity: 0;
+    transition: .3s;
+}
+nav ul li a:after {
+    content: '';
+    position: absolute;
+    top: 0px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #262626;
+    transform: scale(0);
+    opacity: 0;
+    transition: .3s;
+    z-index: -1;
+}
+nav ul li a:hover {
+    color: var(--gray-7);
+}
+
+nav ul li a:focus {
+    color: var(--gray-7);
+}
+nav ul li a:hover:before {
+transform: scaleY(1);
+opacity: 1;
+}
+nav ul li a:hover:after {
+transform: scaleY(1);
+opacity: 1;
+}
+nav ul li a:focus:before {
+transform: scaleY(1);
+opacity: 1;
+}
+nav ul li a:focus:after {
+transform: scaleY(1);
+opacity: 1;
+}
+nav ul li a
 {
-    text-decoration: none; /* Remove underline */
-    color: var(--link-color);
-    font-size: var(--link-size);
+    display:flex;
+    position:absolute;
+
+    align-items: center;
+    vertical-align: middle;
+    align-content: center;
+    text-align: center;
+    justify-content: center;
+
+    width:100%;
+    height:100%;
+    text-decoration: none;
+    color: var(--nav-text-color);
+    font-size: var(--nav-text-size);
+}
+
+.logo-container
+{
+    overflow: hidden;
+    display: flex;
+
+    justify-content: center;
+    vertical-align: middle;
+
+    background: #1b1523;
+}
+
+.logo
+{
+    width:auto;
+    height:100%;
 }
 
 .content
@@ -137,4 +254,14 @@ body
 #vid-1
 {
     left: -250px;
+}
+
+.smoke {
+    left:0px;
+    top:0px;
+    position:absolute;
+    width:100%;
+    height:100%;
+    background-image: url("../content/decals/Smoke.webp");
+    background-size: cover;
 }
