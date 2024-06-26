@@ -5,11 +5,12 @@
 
 *
 {
-    scroll-behavior: smooth;
     font-family: 'Roboto', sans-serif;
 
     --nav-text-color: #202136;
     --nav-text-size: 1.25rem;
+
+    --portfolio-hover-scale: 1.25;
 
     --gray-0: #1b1523;
     --gray-1: #202136;
@@ -31,7 +32,8 @@
 body
 {
     margin: 0;
-    overflow-x: hidden;
+    overflow: hidden;
+    background-color: var(--gray-7);
 }
 
 header
@@ -39,22 +41,23 @@ header
     position: fixed;
     float: left;
 
-    display: grid;
-    grid-template: "a a a";
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
 
     left: 0;
-    z-index: 100;
+    z-index: 10000 !important;
 
     width: 100%;
     height: 64px;
 
-    outline: solid 1px;
+    /*outline: solid 1px;*/
 }
 
 nav
 {
     left: 0;
-    width: 75vw;
+    width: 85%;
 }
 
 nav ul
@@ -71,19 +74,16 @@ nav ul
     padding: 0;
     
     flex-direction: row;
-    justify-content: center;
-    vertical-align: middle;
+    justify-content: space-around;
     align-items: center;
 
     list-style: none;
 
-    background: var(--gray-7);
 }
 nav ul li
 {
-    display:flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
 
     width: 75%;
     height: 100%;
@@ -160,6 +160,7 @@ nav ul li a
     align-content: center;
     text-align: center;
     justify-content: center;
+    justify-content: space-around;
 
     width:100%;
     height:100%;
@@ -177,6 +178,9 @@ nav ul li a
     vertical-align: middle;
 
     background: #1b1523;
+
+    height:100%;
+    aspect-ratio: 1;
 }
 
 .logo
@@ -188,38 +192,88 @@ nav ul li a
 .content
 {
     position: absolute;
+    overflow-x: hidden;
+    overflow-y: scroll;
     
     left:0;
-    top: 0;
-    width: 100%;
+    max-width: 100vw;
     height: 100%;
 
-    display:grid;
-    grid-column: 1;
+    display:flex;
+    flex-flow: wrap;
+}
+
+.content-container
+{
+    position:absolute;
+
+    left:0px;
+    top:0px;
+
+    width:100%;
+    height:100%;
+
+    overflow: hidden;
 }
 
 .content section
 {
+    position: relative;
+
     width: 100vw;
-    height: 100vh;
+    height: calc(100vh + 64px);;
+
+    overflow: visible;
+
+    /* overflow: visible; */
 }
 
 .content-bgvideo
 {
     position: absolute;
 
-    width: auto;
-    height: 75vh;
+    aspect-ratio: 4/3;
+    min-height: 125vh;
+    min-width: 125vw;
 
     background-size: 100% 100%;
+    object-fit: cover;
+
+    -webkit-mask-image: url("./../content/masks/Smoke copy.png");
+    mask-image: url("./../content/masks/Smoke copy.png");
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: cover;
+    mask-size: cover;
+
+    z-index: 1;
+    overflow: visible;
+}
+
+.section-content
+{
+    position:absolute;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    vertical-align: middle;
+
+    left:0px;
+    top:0px;
+
+    width:100%;
+    height:100%;
+
+    z-index: 15;
+    overflow: hidden;
 }
 
 
 .social-button {
   --c: #fff;
   /* text color */
-  background: linear-gradient(90deg, #0000 33%, #fff5, #0000 67%) var(--_p,100%)/300% no-repeat,
-    #004dff;
   /* background color */
   color: #0000;
   border: none;
@@ -251,10 +305,6 @@ nav ul li a
   padding: .1em .3em;
 }
 
-#vid-1
-{
-    left: -250px;
-}
 
 .smoke {
     left:0px;
@@ -262,6 +312,112 @@ nav ul li a
     position:absolute;
     width:100%;
     height:100%;
-    background-image: url("../content/decals/Smoke.webp");
-    background-size: cover;
+    z-index:1;
+    pointer-events: none;;
+}
+
+#smoke1
+{
+    background-image: url("../content/decals/Smoke.png");
+    background-size: 100% 100%;
+    width: 175%; 
+    height:125%;
+    
+}
+
+#smoke2
+{
+    background-image: url("../content/decals/0_3.webp");
+    background-size: 100% 100%;
+    width: 100%; 
+    height: 100%;
+    opacity: 25%;
+}
+
+#smoke3
+{
+    background-image: url("../content/decals/0_2.webp");
+    background-size: 100% 100%;
+
+    width: 100%; 
+    height:100%;
+}
+
+
+.smoke-fade
+{
+    background-size: 100% 100% !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+}
+
+.bg-section-fade
+{
+    position:absolute;
+    bottom:-1%;
+    left:0px;
+    right:0px;
+    height:25%;
+    background: url("../content/masks/SmokeBorder.png");
+    background-position: 0 -0%;
+    background-size: 50% 200%;
+    background-repeat:repeat-x;
+    margin: 0;
+    padding: 0;
+    z-index:15;
+}
+
+.fade-flip
+{
+    bottom: unset;
+    transform: scaleY(-1);
+    z-index: -1;
+    top: 0px;
+}
+
+.social-buttons
+{
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+
+    justify-content: center;
+    vertical-align: middle;
+
+    background: #1b1523;
+
+    width:15%;
+}
+
+.socials a
+{
+}
+
+.glass
+{
+    /* From https://css.glass */
+    background: rgba(213, 217, 233, 0.43);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10.1px);
+    -webkit-backdrop-filter: blur(10.1px);
+}
+
+.panel
+{
+    display:flex;
+    flex-direction: column;
+    height: fit-content;
+    width: fit-content;
+    padding: 16px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border: 1px solid rgba(213, 217, 233, 1);
+    margin: 16px;
+}
+
+.centered
+{
+    text-align: center;
 }

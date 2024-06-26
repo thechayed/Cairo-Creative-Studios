@@ -1,20 +1,22 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="css/main.css">
+        <link rel="stylesheet" type="text/css" href="css/splash.css">
+        <link rel="stylesheet" type="text/css" href="css/portfolio.css">
 
         <script src="js/tween.umd.js"></script>
         <!-- script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/ScrollMagic.min.js"></script -->
     </head>
     <body>
-        <header>
+        <header class="glass">
             <div class="logo-container">
-                <img class="logo" src="content/Logo_Compact.png">
+                <img class="logo" src="content/Logo_Compact.png"/>
             </div>
             <nav>
                 <ul>
                     <li >
                         <a href="#Splash">
-                        Splash
+                            Splash
                         </a>
                     </li>
                     <li>
@@ -39,20 +41,67 @@
                     </li>
                 </ul>
             </nav>
+            <div class="social-buttons">
+                <a class="social-button" src="content/socials/itch.png"></a>
+                <a class="social-button" src="content/socials/fiver.png"></a>
+                <a class="social-button" src="content/socials/meta.png"></a>
+                <a class="social-button" src="content/socials/twitter.png"></a>
+            </div>
         </header>
-
+        
         <div class="content">
+
             <section id="Splash">
-                <video class="content-bgvideo" id="vid-1" src="content/Gumbot.mp4" autoplay muted loop></video>
+                
+                <div id="splash-logo"><img src="content/Logo_White_Transparent.png" alt=""/></div>
+
+                <div class="section-content">
+        
+                <video class="content-bgvideo" id="vid-1" src="./videoplayback.mp4" autoplay muted loop></video>
+                <script>
+                var bgvid = document.getElementById("vid-1");
+                bgvid.play();
+                </script>
+                </div>
+
+                <div class="smoke" id="smoke3" style="float: left; left: -50%; top: -50%;"></div>
+                <div class="smoke" id="smoke1" style="float: left; right: -128px;  bottom: -128px;"></div>
+                <div class="smoke" id="smoke3" style="float: left; left: -300px; top: calc(100% + 200px);"></div>
+        
+                <div class="bg-section-fade"></div>
+
             </section>
             <section id="Portfolio">
-                <video class="content-bgvideo"></video>
+                <div class="section-content">
+                    <div class="panel glass">
+                        <p>Portfolio</p>
+                    </div>
+                    <div class="portfolio-video">
+                        <video controls></video>
+                    </div>
+                    <div class="portfolio-thumbnails">
+                        <div class="portfolio-item" id="gunface"></div>
+                        <div class="portfolio-item" id="novablaster"></div>
+                    </div>
+                </div>
+                <div class="smoke" id="smoke2" style="float: left;left: -400px;  bottom: -512px;"></div>
             </section>
             <section id="Services">
-                <video class="content-bgvideo"></video>
+                <div class="bg-section-fade fade-flip"></div>
+                <div class="section-content">
+                    <div class="panel glass">
+                        <p>Contract Services</p>
+                    </div>
+                    <div class="panel glass centered">
+                        <p>Hi there! Here at Cairo Creative Studios, we specialize in Game Development, Web Development and Pixel Art.</p>
+                        <p>If you want us to masterfully bring your project to life, check out our Fiverr!</p>
+                    </div>
+                </div>
+                <div class="smoke" id="smoke3" style="float: left; left: -50%; top: -50%;"></div>
+                <div class="smoke" id="smoke1" style="float: left; right: -128px;  bottom: -128px;"></div>
+                <div class="smoke" id="smoke3" style="float: left; left: -300px; top: calc(100% + 200px);"></div>
             </section>
             <section id="About">
-                <video class="content-bgvideo"></video>
             </section>
         </div>
 
@@ -60,19 +109,21 @@
         <script>
             var position = {y: 0};
             var autoScroll = false;
+            var content = document.querySelectorAll(".content")[0];
+            var contentTop = document.querySelectorAll(".content-top")[0];
 
             var tween = new TWEEN.Tween(position, false) 
                 .to({y: 0}, 500) 
                 .easing(TWEEN.Easing.Cubic.Out) 
                 .onUpdate(() => {
-                    window.scrollTo(0, position.y);
+                    content.scrollTop(position.y);
                 })
                 .start() 
 
                 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                     anchor.addEventListener('click', function (e) {
-                        position.y = window.scrollY;
-                        autoScroll = true;
+                        position.y = content.scrollTop;
+                        autoScroll = true; 
                         e.preventDefault();
                         var targetElement = document.querySelector(this.getAttribute('href'));
 
@@ -80,7 +131,7 @@
                             .to({y: targetElement.offsetTop}, 500) 
                             .easing(TWEEN.Easing.Cubic.Out) 
                             .onUpdate(() => {
-                                window.scrollTo(0, position.y);
+                                content.scroll({top: position.y});
                             })
                             .start() 
                         });
@@ -94,43 +145,121 @@
             window.requestAnimationFrame(renderLoop);
         </script>
 
-<div class="smoke"></div>
-
+        <!-- Smoke Video Fade -->
         <script>
-            var smokeElements = document.querySelectorAll('.smoke');
+            var bgvid = document.querySelectorAll(".content-bgvideo")[0];
+
+            // move them around
+            function smokeVideoFade(time) {
+                bgvid.style.opacity =  1 - (content.scrollTop / bgvid.parentElement.getBoundingClientRect().height); 
+
+                window.requestAnimationFrame(smokeVideoFade);
+            }
+            window.requestAnimationFrame(smokeVideoFade);
+        </script>
+        
+        <!-- Smoke Clouds Animation -->
+        <script>
+            var smokeElements = document.querySelectorAll('.smoke, .content-bgvideo');
             var smokeElementOriginalPositions = new Map();
+            var previousRandomX = 0;
+            var previousRandomY = 0;
+            var prevAngleRandom = 0;
+            var lastScrollY = window.scrollY;
 
             // Store the default positions of the Smoke Elements
             smokeElements.forEach(function(element) {
-                    smokeElementOriginalPositions.set(element, new Map({x: element.style.left, y: element.style.top}))
+                    if(element.className == "smoke")
+                    {
+                        smokeElementOriginalPositions.set(element, {y: element.parentElement.getBoundingClientRect().bottom, angle: 0});
+                    }
+                    else
+                    {
+                        smokeElementOriginalPositions.set(element, {y: element.getBoundingClientRect().top});
+                    }
                 });
 
             // move them around
-            function renderLoop(time) {
+            function smokeCloudsAnimation(time) {
                 smokeElements.forEach(function(element) {   
-                    element.style.left = element.style.left + random(-500, 500);
-                    element.style.top = element.style.top + random(-500, 500);
 
-                    if(smokeElementOriginalPositions.has(element))
+                    if(element.className == "smoke")
                     {
-                        console.log(smokeElementOriginalPositions[element]);
+                        prevAngleRandom = lerp(prevAngleRandom, Math.sin(random(-180, 180)) * 5, 0.0001);
+                        smokeElementOriginalPositions.get(element).angle = ((smokeElementOriginalPositions.get(element)["angle"] + prevAngleRandom));
+                        if(smokeElementOriginalPositions.get(element)["angle"] < -15) smokeElementOriginalPositions.get(element).angle = -15;
+                        if(smokeElementOriginalPositions.get(element)["angle"] > 15) smokeElementOriginalPositions.get(element).angle = 15;
+                    
+                        lastScrollY = window.scrollY;
+
+                        element.style.webkitTransform = 'rotate('+smokeElementOriginalPositions.get(element).angle+'deg)'; 
+                        element.style.mozTransform    = 'rotate('+smokeElementOriginalPositions.get(element).angle+'deg)'; 
+                        element.style.msTransform     = 'rotate('+smokeElementOriginalPositions.get(element).angle+'deg)'; 
+                        element.style.oTransform      = 'rotate('+smokeElementOriginalPositions.get(element).angle+'deg)'; 
+                        element.style.transform       = 'rotate('+smokeElementOriginalPositions.get(element).angle+'deg)'; 
                     }
-                    element.style.left = lerp(element.style.left, smokeElementOriginalPositions[element].x, 0.25);
-                    element.style.top = lerp(element.style.top, smokeElementOriginalPositions[element].y, 0.25);
+                    else
+                    {
+                        // element.style.position = "fixed"
+                        var offset = -element.getBoundingClientRect().height/2;
+                        //if(isNaN(parseFloat(element.style.top))) element.style.top = offset;
+                        
+                    }
                 });
                 
-                window.requestAnimationFrame(renderLoop);
+                window.requestAnimationFrame(smokeCloudsAnimation);
             }
-            window.requestAnimationFrame(renderLoop);
+            window.requestAnimationFrame(smokeCloudsAnimation);
 
             function random(min, max)
             {
-                return Math.floor(Math.random() * (max - min) + min);
+                return Math.random() * (max - min) + min;
             }
 
             function lerp(a, b, t) {
                 return a * (1 - t) + b * t;
             }
+        </script>
+
+        <script>
+            var portfolioItems = document.querySelectorAll(".portfolio-item");
+            var portfolioVideo = document.querySelector(".portfolio-video video");
+            var portfolioContainer = document.querySelectorAll(".portfolio-container")[0];
+
+            var selectedPortfolioItem = "";
+
+            portfolioItems.forEach(function(element){
+                var img = document.createElement("img");
+                img.setAttribute("src", "./content/portfolio/"+element.getAttribute("id")+"/thumbnail.gif");
+                element.appendChild(img);
+
+                var title = document.createElement("h2");
+                title.innerText = element.getAttribute("id");
+
+                element.addEventListener('click', function (e) {
+                    element.getAttribute("id");
+                    portfolioVideo.setAttribute("src", "./content/portfolio/"+element.getAttribute("id")+"/video.mp4")
+                    portfolioVideo.play();
+                });
+            })
+
+            function updatePortfolioItems(time)
+            {
+                var itemWidth = portfolioItems[0].getBoundingClientRect().width;
+                portfolioContainer.style.gridAutoRows = itemWidth + "px";
+            }
+            window.requestAnimationFrame(updatePortfolioItems);
+        </script>
+
+        <script>
+            var socialButtons = document.querySelectorAll('.social-button');
+
+            socialButtons.forEach(function(element){
+                element.style.backgroundImage = 'url(' + element.getAttribute("src") + ')';
+                element.style.backgroundSize = "contain";
+                element.style.backgroundRepeat = "no-repeat";
+                element.style.backgroundPosition = "center";
+            });
         </script>
     </body>
 </html>
